@@ -26,12 +26,12 @@
 FROM python:3.9.1-slim-buster
 LABEL maintainer="FNNDSC devs <dev@babymri.org>"
 LABEL DEBUG="\
-    docker run -ti --rm    							                            \
-        -v $PWD/pfapi:/usr/local/lib/python3.9/site-packages/pfapi:ro       	\
-        local/pfapi pfapi                                                   	\
-        --ipSelf localhost                                                  	\
-        --portSelf 4005                                                     	\
-	    --swiftIP localhost							                            \
+    docker run -ti --rm                                                         \
+        -v $PWD/pfapi:/usr/local/lib/python3.9/site-packages/pfapi:ro           \
+        local/pfapi pfapi                                                       \
+        --ipSelf localhost                                                      \
+        --portSelf 4005                                                         \
+        --swiftIP localhost                                                     \
         --swiftPort 8080                                                        \
         "
 
