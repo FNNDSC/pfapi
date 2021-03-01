@@ -1,0 +1,5 @@
+pudb
+pyyaml
+jinja2
+fastapi
+uvicorn
