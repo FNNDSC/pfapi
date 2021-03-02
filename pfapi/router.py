@@ -13,10 +13,6 @@ from    fastapi_utils.cbv               import cbv
 from    fastapi_utils.guid_type         import GUID
 from    fastapi_utils.inferring_router  import InferringRouter
 
-from    .cli                            import PFapiCLICore
-from    .cli                            import PFapiCLISwift
-from    .api                            import API
-
 logger = logging.getLogger(__name__)
 
 router = InferringRouter()
