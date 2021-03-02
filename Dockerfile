@@ -68,11 +68,11 @@ RUN pip install .
 
 USER $USER
 
-ENTRYPOINT [ "gunicorn" ]
+ENTRYPOINT [ "uvicorn" ]
 EXPOSE 4005
 
 # Start server
-CMD [ "--bind", "0.0.0.0:4005", "-w", "7", "-t", "7400", "pfapi.__main__:main" ]
+CMD [ "--host", "0.0.0.0", "--port", "4005", "--workers", "7",  "pfapi.app:app" ]
 
 # RUN pip install .
 # EXPOSE 4005

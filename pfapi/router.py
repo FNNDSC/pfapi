@@ -19,8 +19,10 @@ from    .api                            import API
 
 logger = logging.getLogger(__name__)
 
+router = InferringRouter()
 
-@cbv(API.router)
+
+@cbv(router)
 class hello_router:
     """
     A router for the 'hello' endpoint
