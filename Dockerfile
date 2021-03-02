@@ -8,10 +8,10 @@
 #
 #   docker build -t local/pfapi .
 #
-# In the case of a proxy (located at say 192.168.13.14:3128), do:
+# In the case of a proxy (located at say 10.41.13.4:3128), do:
 #
-#   export PROXY=192.168.13.14:3128
-#   docker build --build-arg http_proxy=$PROXY --build-arg UID=$UID -t local/pfapi.
+#   export PROXY=http://10.41.13.4:3128
+#   docker build --build-arg http_proxy=$PROXY --build-arg UID=$UID -t local/pfapi .
 #
 # To run an interactive shell inside this container, do:
 #
@@ -35,18 +35,46 @@ LABEL DEBUG="\
         --swiftPort 8080                                                        \
         "
 
-ENV DEBIAN_FRONTEND=noninteractive APPLICATION_MODE="production"
+# Set some env variables...
+ENV DEBIAN_FRONTEND=noninteractive APPLICATION_MODE="production" UID=$UID
+ENV WORKDIR=/usr/local/src
+ENV USER=app
+ENV APP_HOME=/home/app/web
 
-WORKDIR /usr/local/src
+WORKDIR $WORKDIR
 
-COPY requirements.txt .
-RUN apt-get update && apt-get upgrade
+# Misc updating...
+RUN pip install --upgrade pip
+RUN apt-get update && apt-get -y upgrade
+RUN apt-get -y install sudo
+RUN apt-get -y install python3-uvicorn
+RUN apt-get -y install python3-httptools
+RUN apt-get -y install python3-websockets
+RUN apt-get -y install gcc
+
+# Install core requirements into container space...
+COPY ./requirements.txt $WORKDIR/requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . .
+# Add the (non root) user that will "run" the service...
+RUN adduser --system --group $USER
+# RUN echo -e "app1234\napp1234" | passwd  $USER
+RUN mkdir $APP_HOME
+
+WORKDIR ${APP_HOME}
+COPY . ${APP_HOME}
+RUN chown -R ${USER}:${USER} $APP_HOME
 RUN pip install .
+
+USER $USER
+
+ENTRYPOINT [ "gunicorn" ]
 EXPOSE 4005
 
-# CMD ["pfapi", "--help"]
+# Start server
+CMD [ "--bind", "0.0.0.0:4005", "-w", "7", "-t", "7400", "pfapi.__main__:main" ]
 
-CMD ["uvicorn", "pfapi.main:app", "--host", "0.0.0.0", "--port", "4005"]
+# RUN pip install .
+# EXPOSE 4005
+# CMD ["pfapi", "--help"]
+# CMD ["uvicorn", "pfapi.__main__:main", "--host", "0.0.0.0", "--port", "4005"]
