@@ -28,7 +28,7 @@ setup(
     long_description                =   str_readme,
     long_description_content_type   =   'text/markdown',
     python_requires                 =   '>=3.8',
-    install_requires                =   ['pudb', 'pyyaml', 'jinja2', 'fastapi', 'uvicorn'],
+    install_requires                =   ['pudb', 'pyyaml', 'jinja2', 'fastapi', 'fastapi-utils', 'uvicorn', 'gunicorn', 'uvloop', 'httptools'],
     entry_points={
         'console_scripts': [
             'pfapi = pfapi.__main__:main'

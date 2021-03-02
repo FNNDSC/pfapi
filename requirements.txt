@@ -2,4 +2,8 @@ pudb
 pyyaml
 jinja2
 fastapi
+fastapi-utils
 uvicorn
+gunicorn
+uvloop
+httptools

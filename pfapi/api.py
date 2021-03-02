@@ -13,8 +13,10 @@ from    fastapi_utils.cbv               import cbv
 from    fastapi_utils.guid_type         import GUID
 from    fastapi_utils.inferring_router  import InferringRouter
 
-from .cli import PFapiCLICore
-from .cli import PFapiCLISwift
+from    .cli                            import PFapiCLICore
+from    .cli                            import PFapiCLISwift
+
+import  pudb
 
 logger = logging.getLogger(__name__)
 
@@ -24,27 +26,13 @@ class API:
     the base machinery for a fastapi system.
     """
 
+    app             = FastAPI()
+    router          = InferringRouter()
+    app.include_router(router)
+
     def __init__(   self,
                     CLIcore :   PFapiCLICore,
                     CLIswift:   PFapiCLISwift):
 
+        # pudb.set_trace()
         self.args   = Namespace(**vars(CLIcore.args), **vars(CLIswift.args))
-        self.app    = FastAPI()
-        self.router = InferringRouter()
-        self.app.include_router(router)
-
-@cbv(router)
-class hello_router:
-    """
-    A router for the 'hello' endpoint
-    """
-    @router.get("/hello")
-    def hello_item(self):
-        return {'message': 'Hello, world!'}
-
-class GuessingException(Exception):
-    """
-    For when we can't detect something about the system we need to know.
-    """
-    pass
-
