@@ -28,11 +28,7 @@ LABEL maintainer="FNNDSC devs <dev@babymri.org>"
 LABEL DEBUG="\
     docker run -ti --rm                                                         \
         -v $PWD/pfapi:/usr/local/lib/python3.9/site-packages/pfapi:ro           \
-        local/pfapi pfapi                                                       \
-        --ipSelf localhost                                                      \
-        --portSelf 4005                                                         \
-        --swiftIP localhost                                                     \
-        --swiftPort 8080                                                        \
+        -p 4005:4005 local/pfapi                                                \
         "
 
 # Set some env variables...
@@ -73,8 +69,3 @@ EXPOSE 4005
 
 # Start server
 CMD [ "--host", "0.0.0.0", "--port", "4005", "--workers", "7",  "pfapi.app:app" ]
-
-# RUN pip install .
-# EXPOSE 4005
-# CMD ["pfapi", "--help"]
-# CMD ["uvicorn", "pfapi.__main__:main", "--host", "0.0.0.0", "--port", "4005"]
